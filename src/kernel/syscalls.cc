@@ -211,25 +211,44 @@ extern "C" void _init_sig_handler(vaddr sighandler) {
   CurrProcess().setSignalHandler(sighandler);
 }
 
+//--------------------------------------------------------------------------------------
+//Sets the cpu affinity mask of the process whose id is pid to the value specified by mask.
+//If pid is zero, then the calling process is used.
+//The argument cpusetsize is the length, in bytes, of the data pointed to by mask.
+//Normally this argument would be specified as sizeof(cpu_set_t).
+//
+//If this shit worked return 0.
 extern "C" sched_setaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask) {
-  //implement shit here
-  //
-  //Sets the cpu affinity mask of the process whose id is pid to the value specified by mask.
-  //If pid is zero, then the calling process is used.
-  //The argument cpusetsize is the length, in bytes, of the data pointed.
-  //Normally this argument would be specified as sizeof(cpu_set_t).
-  //
-  //If this shit worked return 0.
+  if (pid != 0) {
+	  //error EPERM
+  } else {
+		int cpuset;
+		if (cpusetsize > 4) {
+			cpuset = *mask & 0b1111;
+		} else {
+			cpuset =*mask;
+		} LocalProcessor::getCurrThread()->setAffinityMask(cpuset);		//sets affinity of current thread to *mask
+	}
+
+  } return 0;
 }
 
+//Writes the affinity mask of the process whose id is pid into the cpu_set_t structure -> mask.
+//If pid is zero, then the mask of the calling process is returned.
+//
+//If successful return 0, else return -1 and errno is set appropriately.
 extern "C" sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask) {
-  //implement shit here part 2
-  //
-  //Writes the affinity mask of the process whose id is pid into the cpu_set_t structure -> mask.
-  //If pid is zero, then the mask of the calling process is returned.
-  //
-  //If successful return 0, else return -1 and errno is set appropriately.
+  if (pid != 0) {
+	  //error EPERM
+  } else {
+		int cpuset = LocalProcessor::getCurrThread()->getAffinityMask();
+		if (cpuset <= 4) {
+			//wot is going on
+		}	  
+	  
+  } return 0;
 }
+//--------------------------------------------------------------------------------------
 
 /******* dummy functions *******/
 

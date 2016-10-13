@@ -111,6 +111,7 @@ void Scheduler::resume(Thread& t) {
   else Runtime::getScheduler()->enqueue(t);
 }
 
+//-----------------------------------------Scheduler-Code-------------------------------
 void Scheduler::preempt() {               // IRQs disabled, lock count inflated
 #if TESTING_NEVER_MIGRATE
   switchThread(this);
@@ -124,6 +125,7 @@ void Scheduler::preempt() {               // IRQs disabled, lock count inflated
   switchThread(target);
 #endif
 }
+//--------------------------------------------------------------------------------------
 
 void Scheduler::suspend(BasicLock& lk) {
   Runtime::FakeLock fl;
