@@ -19,6 +19,9 @@ extern "C" pid_t getcid();
 
 extern "C" int privilege(void*, mword, mword, mword, mword);
 
+extern "C" int sched_setaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask);
+extern "C" int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask);
+
 namespace SyscallNum {
 
 enum : mword {
@@ -44,7 +47,9 @@ enum : mword {
   semV,
   privilege,
   _init_sig_handler,
-  max
+  max,
+  sched_setaffinity,		// IF IT DOESN'T WORK ADD IMPL
+  sched_getaffinity
 };
 
 };
